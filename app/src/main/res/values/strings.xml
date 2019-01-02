@@ -39,14 +39,14 @@
     <string name="tea_size_large">Large ($7/cup)</string>
     <string name="milk_type_none">None</string>
     <string name="milk_type_nonfat">Nonfat Milk</string>
-    <string name="milk_type_1_percent">1% Milk</string>
-    <string name="milk_type_2_percent">2% Milk</string>
+    <string name="milk_type_1_percent">1%% Milk</string>
+    <string name="milk_type_2_percent">2%% Milk</string>
     <string name="milk_type_whole">Whole Milk</string>
-    <string name="sweet_type_0">0% - Not Sweet</string>
-    <string name="sweet_type_25">25% - Slightly Sweet</string>
-    <string name="sweet_type_50">50% - Half Sweet</string>
-    <string name="sweet_type_75">75% - Moderately Sweet</string>
-    <string name="sweet_type_100">100% - Full Sweetness</string>
+    <string name="sweet_type_0">0%% - Not Sweet</string>
+    <string name="sweet_type_25">25%% - Slightly Sweet</string>
+    <string name="sweet_type_50">50%% - Half Sweet</string>
+    <string name="sweet_type_75">75%% - Moderately Sweet</string>
+    <string name="sweet_type_100">100%% - Full Sweetness</string>
 
 
     <!--OrderSummaryActivity summary values-->
@@ -82,16 +82,16 @@
     <string-array name="milk_array">
         <item>None</item>
         <item>Nonfat Milk</item>
-        <item>1% Milk</item>
-        <item>2% Milk</item>
+        <item>1%% Milk</item>
+        <item>2%% Milk</item>
         <item>Whole Milk</item>
     </string-array>
 
     <string-array name="sugar_array">
-        <item>0% - Not Sweet</item>
-        <item>25% - Slightly Sweet</item>
-        <item>50% - Half Sweet</item>
-        <item>75% - Moderately Sweet</item>
-        <item>100% - Full Sweetness</item>
+        <item>0%% - Not Sweet</item>
+        <item>25%% - Slightly Sweet</item>
+        <item>50%% - Half Sweet</item>
+        <item>75%% - Moderately Sweet</item>
+        <item>100%% - Full Sweetness</item>
     </string-array>
 </resources>

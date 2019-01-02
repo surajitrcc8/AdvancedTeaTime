@@ -17,6 +17,7 @@
 package com.example.android.teatime;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.android.teatime.util.TeaUtil;
+
 import java.text.NumberFormat;
 
 public class OrderActivity extends AppCompatActivity {
@@ -34,13 +37,7 @@ public class OrderActivity extends AppCompatActivity {
     private int mQuantity = 0;
     private int mTotalPrice = 0;
 
-    private static final int SMALL_PRICE = 5;
-    private static final int MEDIUM_PRICE = 6;
-    private static final int LARGE_PRICE = 7;
 
-    private static final String TEA_SIZE_SMALL = "Small ($5/cup)";
-    private static final String TEA_SIZE_MEDIUM = "Medium ($6/cup)";
-    private static final String TEA_SIZE_LARGE = "Large ($7/cup)";
 
     private String mMilkType;
     private String mSugarType;
@@ -101,24 +98,13 @@ public class OrderActivity extends AppCompatActivity {
         mSizeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        mSize = getString(R.string.tea_size_small);
-                        break;
-                    case 1:
-                        mSize = getString(R.string.tea_size_medium);
-                        break;
-                    case 2:
-                        mSize = getString(R.string.tea_size_large);
-                        break;
-
-                }
+                mSize = TeaUtil.getTeaSize(position, getResources());
             }
 
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mSize = getString(R.string.tea_size_small);
+                mSize = TeaUtil.getTeaSize(0, getResources());
             }
         });
 
@@ -145,30 +131,14 @@ public class OrderActivity extends AppCompatActivity {
         mSizeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        mMilkType = getString(R.string.milk_type_none);
-                        break;
-                    case 1:
-                        mMilkType = getString(R.string.milk_type_nonfat);
-                        break;
-                    case 2:
-                        mMilkType = getString(R.string.milk_type_1_percent);
-                        break;
-                    case 3:
-                        mMilkType = getString(R.string.milk_type_2_percent);
-                        break;
-                    case 4:
-                        mMilkType = getString(R.string.milk_type_whole);
-                        break;
-                }
+                mMilkType = TeaUtil.getMilkType(position, getResources());
             }
 
 
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mMilkType = getString(R.string.milk_type_none);
+                mMilkType = TeaUtil.getMilkType(0, getResources());
             }
         });
 
@@ -196,29 +166,13 @@ public class OrderActivity extends AppCompatActivity {
         mSizeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        mSugarType = getString(R.string.sweet_type_0);
-                        break;
-                    case 1:
-                        mSugarType = getString(R.string.sweet_type_25);
-                        break;
-                    case 2:
-                        mSugarType = getString(R.string.sweet_type_50);
-                        break;
-                    case 3:
-                        mSugarType = getString(R.string.sweet_type_75);
-                        break;
-                    case 4:
-                        mSugarType = getString(R.string.sweet_type_100);
-                        break;
-                }
+                mSugarType = TeaUtil.getSugarType(position, getResources());
             }
 
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mSugarType = getString(R.string.sweet_type_100);
+                mSugarType = TeaUtil.getSugarType(4, getResources());
             }
         });
 
@@ -229,7 +183,7 @@ public class OrderActivity extends AppCompatActivity {
      */
     public void increment(View view) {
 
-        mQuantity = mQuantity + 1;
+        mQuantity = TeaUtil.increment(mQuantity);
         displayQuantity(mQuantity);
         mTotalPrice = calculatePrice();
         displayCost(mTotalPrice);
@@ -241,7 +195,7 @@ public class OrderActivity extends AppCompatActivity {
     public void decrement(View view) {
         if (mQuantity > 0) {
 
-            mQuantity = mQuantity - 1;
+            mQuantity = TeaUtil.decrement(mQuantity);
             displayQuantity(mQuantity);
             mTotalPrice = calculatePrice();
             displayCost(mTotalPrice);
@@ -255,19 +209,7 @@ public class OrderActivity extends AppCompatActivity {
      * @return total mTotalPrice
      */
     private int calculatePrice() {
-
-        // Calculate the total order mTotalPrice by multiplying by the mQuantity
-        switch (mSize) {
-            case TEA_SIZE_SMALL:
-                mTotalPrice = mQuantity * SMALL_PRICE;
-                break;
-            case TEA_SIZE_MEDIUM:
-                mTotalPrice = mQuantity * MEDIUM_PRICE;
-                break;
-            case TEA_SIZE_LARGE:
-                mTotalPrice = mQuantity * LARGE_PRICE;
-                break;
-        }
+        mTotalPrice = TeaUtil.getTeaPrice(mSize, mQuantity);
         return mTotalPrice;
     }
 

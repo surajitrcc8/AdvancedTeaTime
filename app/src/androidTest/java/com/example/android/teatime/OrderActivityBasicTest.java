@@ -74,11 +74,11 @@ public class OrderActivityBasicTest {
         // Check the initial quantity variable is zero
         onView((withId(R.id.quantity_text_view))).check(matches(withText("0")));
 
-        // Click on decrement button
+        // Click on increment button
         onView((withId(R.id.increment_button)))
                 .perform(click());
 
-        // Verify that the decrement button decreases the quantity by 1
+        // Verify that the increment button decreases the quantity by 1
         onView(withId(R.id.quantity_text_view)).check(matches(withText("1")));
 
         // Verify that the increment button also increases the total cost to $5.00

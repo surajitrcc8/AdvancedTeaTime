@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.example.android.teatime.IdlingResource.SimpleIdlingResource;
 import com.example.android.teatime.model.Tea;
@@ -38,6 +39,8 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
     Intent mTeaIntent;
 
     public final static String EXTRA_TEA_NAME = "com.example.android.teatime.EXTRA_TEA_NAME";
+    private ProgressBar progressBar;
+    private GridView gridview;
 
     // The Idling Resource which will be null in production.
     @Nullable
@@ -62,6 +65,8 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
         Toolbar menuToolbar = (Toolbar) findViewById(R.id.menu_toolbar);
         setSupportActionBar(menuToolbar);
         getSupportActionBar().setTitle(getString(R.string.menu_title));
+        progressBar = (ProgressBar) findViewById(R.id.pb_loading);
+        gridview = (GridView) findViewById(R.id.tea_grid_view);
 
         // Get the IdlingResource instance
         getIdlingResource();
@@ -75,6 +80,8 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
     @Override
     protected void onStart() {
         super.onStart();
+        progressBar.setVisibility(View.VISIBLE);
+        gridview.setVisibility(View.INVISIBLE);
         ImageDownloader.downloadImage(this, MenuActivity.this, mIdlingResource);
     }
 
@@ -90,9 +97,11 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
 
         // Create a {@link TeaAdapter}, whose data source is a list of {@link Tea}s.
         // The adapter know how to create grid items for each item in the list.
-        GridView gridview = (GridView) findViewById(R.id.tea_grid_view);
+
         TeaMenuAdapter adapter = new TeaMenuAdapter(this, R.layout.grid_item_layout, teas);
         gridview.setAdapter(adapter);
+        progressBar.setVisibility(View.INVISIBLE);
+        gridview.setVisibility(View.VISIBLE);
 
         // Set a click listener on that View
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

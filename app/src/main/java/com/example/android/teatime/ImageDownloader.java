@@ -68,13 +68,6 @@ class ImageDownloader {
             idlingResource.setIdleState(false);
         }
 
-
-        // Display a toast to let the user know the images are downloading
-        String text = context.getString(R.string.loading_msg);
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-
         // Fill ArrayList with Tea objects
         mTeas.add(new Tea(context.getString(R.string.black_tea_name), R.drawable.black_tea));
         mTeas.add(new Tea(context.getString(R.string.green_tea_name), R.drawable.green_tea));

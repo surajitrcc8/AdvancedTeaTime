@@ -66,7 +66,6 @@ class ImageDownloader {
          */
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
-
         }
 
         // Fill ArrayList with Tea objects

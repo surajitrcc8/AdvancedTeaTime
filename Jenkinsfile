@@ -6,23 +6,39 @@ pipeline {
   }
   stages {
     stage('Compile') {
+    when {
+       // Only execute this stage when building from the `beta` branch
+       branch 'master'
+    }
       steps {
         sh './gradlew compileDebugSources'
       }
     }
     stage('Static analysis') {
+    when {
+           // Only execute this stage when building from the `beta` branch
+           branch 'master'
+        }
           steps {
             sh './gradlew lintDebug'
             androidLint(pattern: '**/lint-results-*.xml')
           }
     }
     stage('Unit test') {
+    when {
+               // Only execute this stage when building from the `beta` branch
+               branch 'master'
+            }
       steps {
         sh './gradlew testDebugUnitTest testDebugUnitTest'
         junit '**/TEST-*.xml'
       }
     }
     stage('Build APK') {
+    when {
+               // Only execute this stage when building from the `beta` branch
+               branch 'master'
+            }
       steps {
         sh './gradlew assembleDebug'
         archiveArtifacts '**/*.apk'

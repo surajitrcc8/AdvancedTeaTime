@@ -1,5 +1,7 @@
 pipeline {
   agent any
+  def ANDROID_HOME='/Users/Shared/Jenkins/Library/Android/sdk/'
+  def ADB="$ANDROID_HOME/platform-tools/adb"
   options {
     // Stop the build early in case of compile or test failures
     skipStagesAfterUnstable()
@@ -39,9 +41,22 @@ pipeline {
                    // Only execute this stage when building from the `beta` branch
                    branch 'master'
                 }
-          steps {
-            sh './gradlew connectedDebugAndroidTest'
-          }
+
+    parallel (
+            launchEmulator: {
+                sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
+            },
+            runAndroidTests: {
+                timeout(time: 20, unit: 'SECONDS') {
+                  sh "$ADB wait-for-device"
+                }
+                try {
+                    sh "./gradlew connectedDebugAndroidTest"
+                } catch(e) {
+                    error = e
+                }
+            }
+          )
         }
     stage('Build APK') {
     when {

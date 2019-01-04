@@ -11,8 +11,14 @@
  limitations under the License.-->
 
 <!--Layout for a GridView item in the Menu Activity-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="teaViewModel"
+            type="com.example.android.teatime.ViewModel.TeaViewModel"/>
+    </data>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/grid_item_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -24,7 +30,8 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="175dp"
-        android:layout_height="175dp"/>
+        android:layout_height="175dp"
+        app:imageUrl="@{teaViewModel.teaImage}"/>
 
     <TextView
         android:id="@+id/tea_grid_name"
@@ -33,6 +40,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:text="@{teaViewModel.teaName}"/>
 
 </LinearLayout>
+</layout>

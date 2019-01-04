@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.anything;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -85,7 +86,7 @@ public class IdlingResourceMenuActivityTest {
 
     @Test
     public void shouldShowCorrectTeamName() {
-        onData(anything()).inAdapterView(withId(R.id.tea_grid_view)).atPosition(1).perform(click());
+        onView(withId(R.id.rv_tea_list)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.tea_name_text_view)).check(matches(withText(TEA_NAME)));
     }
 

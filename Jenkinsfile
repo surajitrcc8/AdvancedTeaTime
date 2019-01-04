@@ -1,7 +1,10 @@
 pipeline {
   agent any
-  def ANDROID_HOME='/Users/Shared/Jenkins/Library/Android/sdk/'
-  def ADB="$ANDROID_HOME/platform-tools/adb"
+  environment {
+       ANDROID_HOME='/Users/Shared/Jenkins/Library/Android/sdk/'
+       ADB="$ANDROID_HOME/platform-tools/adb"
+   }
+
   options {
     // Stop the build early in case of compile or test failures
     skipStagesAfterUnstable()

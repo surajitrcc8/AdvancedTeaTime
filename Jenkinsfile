@@ -5,10 +5,6 @@ pipeline {
     skipStagesAfterUnstable()
   }
   stages {
-  when {
-      // Only execute this stage when building from the `beta` branch
-      branch 'master'
-   }
     stage('Compile') {
       steps {
         sh './gradlew compileDebugSources'

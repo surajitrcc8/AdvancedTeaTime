@@ -67,13 +67,11 @@ pipeline {
                         sh "$ADB wait-for-device"
 
                  }
-                 try {
+
 
                                            sh "./gradlew connectedDebugAndroidTest"
 
-                 } catch(e) {
-                     error = e
-                 }
+
              }
            )
            }

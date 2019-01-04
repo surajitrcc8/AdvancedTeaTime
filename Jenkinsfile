@@ -53,9 +53,31 @@ pipeline {
                    // Only execute this stage when building from the `beta` branch
                    branch 'master'
                 }
-          steps {
-                      sh "./gradlew connectedDebugAndroidTest"
-                    }
+
+
+     parallel (
+             launchEmulator: {
+             steps {
+                 sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
+                 }
+             },
+             runAndroidTests: {
+                 timeout(time: 20, unit: 'SECONDS') {
+                 steps{
+                        sh "$ADB wait-for-device"
+                   }
+                 }
+                 try {
+                     steps {
+                                           sh "./gradlew connectedDebugAndroidTest"
+                                         }
+                 } catch(e) {
+                     error = e
+                 }
+             }
+           )
+
+
      }
     stage('Build APK') {
     when {

@@ -39,28 +39,24 @@ pipeline {
         junit '**/TEST-*.xml'
       }
     }
+    stage('Launch emulator') {
+        when {
+                   // Only execute this stage when building from the `beta` branch
+                   branch 'master'
+                }
+          steps {
+            sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
+          }
+     }
     stage('Instrument test') {
         when {
                    // Only execute this stage when building from the `beta` branch
                    branch 'master'
                 }
-
-    parallel (
-            launchEmulator: {
-                sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
-            },
-            runAndroidTests: {
-                timeout(time: 20, unit: 'SECONDS') {
-                  sh "$ADB wait-for-device"
-                }
-                try {
-                    sh "./gradlew connectedDebugAndroidTest"
-                } catch(e) {
-                    error = e
-                }
-            }
-          )
-        }
+          steps {
+                      sh "./gradlew connectedDebugAndroidTest"
+                    }
+     }
     stage('Build APK') {
     when {
                // Only execute this stage when building from the `beta` branch

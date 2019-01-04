@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-       ANDROID_HOME='/Users/Shared/Jenkins/Library/Android/sdk/'
+       ANDROID_HOME='/Users/Shared/Jenkins/Library/Android/sdk'
        ADB="$ANDROID_HOME/platform-tools/adb"
    }
 

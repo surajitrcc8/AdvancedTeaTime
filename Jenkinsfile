@@ -7,6 +7,7 @@ pipeline {
   stages {
     stage('Compile') {
       steps {
+        sh './gradlew clean'
         sh './gradlew compileDebugSources'
       }
     }

@@ -39,13 +39,13 @@ pipeline {
         junit '**/TEST-*.xml'
       }
     }
-    stage('Launch emulator') {
+    stage('Start adb server') {
         when {
                    // Only execute this stage when building from the `beta` branch
                    branch 'master'
                 }
           steps {
-            sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
+           sh "$ADB start-server"
           }
      }
     stage('Instrument test') {

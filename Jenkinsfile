@@ -34,6 +34,15 @@ pipeline {
         junit '**/TEST-*.xml'
       }
     }
+    stage('Instrument test') {
+        when {
+                   // Only execute this stage when building from the `beta` branch
+                   branch 'master'
+                }
+          steps {
+            sh './gradlew connectedDebugAndroidTest'
+          }
+        }
     stage('Build APK') {
     when {
                // Only execute this stage when building from the `beta` branch

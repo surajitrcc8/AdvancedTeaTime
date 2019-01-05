@@ -82,16 +82,16 @@
     <string-array name="milk_array">
         <item>None</item>
         <item>Nonfat Milk</item>
-        <item>1%% Milk</item>
-        <item>2%% Milk</item>
+        <item>1% Milk</item>
+        <item>2% Milk</item>
         <item>Whole Milk</item>
     </string-array>
 
     <string-array name="sugar_array">
-        <item>0%% - Not Sweet</item>
-        <item>25%% - Slightly Sweet</item>
-        <item>50%% - Half Sweet</item>
-        <item>75%% - Moderately Sweet</item>
-        <item>100%% - Full Sweetness</item>
+        <item>0% - Not Sweet</item>
+        <item>25% - Slightly Sweet</item>
+        <item>50% - Half Sweet</item>
+        <item>75% - Moderately Sweet</item>
+        <item>100% - Full Sweetness</item>
     </string-array>
 </resources>

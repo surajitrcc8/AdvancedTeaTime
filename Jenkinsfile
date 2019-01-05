@@ -58,7 +58,7 @@ pipeline {
      parallel (
              launchEmulator: {
 
-                 sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full"
+                 sh "$ANDROID_HOME/tools/./emulator -avd Nexus_5_API_26 -netdelay none -netspeed full -no-window"
 
              },
              runAndroidTests: {

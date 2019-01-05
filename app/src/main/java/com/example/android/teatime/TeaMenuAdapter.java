@@ -16,16 +16,20 @@
 
 package com.example.android.teatime;
 
-import android.app.Activity;
 import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
+import android.support.v7.view.menu.MenuView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.android.teatime.ViewModel.TeaViewModel;
 import com.example.android.teatime.model.Tea;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,46 +38,66 @@ import java.util.ArrayList;
  * the GridView in MenuActivity
  */
 
-public class TeaMenuAdapter extends ArrayAdapter<Tea> {
+public class TeaMenuAdapter extends RecyclerView.Adapter<TeaMenuAdapter.TeaViewHolder> {
 
-    private Context mContext;
     private int layoutResourceId;
-    private ArrayList data = new ArrayList();
+    private ArrayList<Tea> teas = new ArrayList<Tea>();
+    private OnItemClickListener onItemClickListener;
 
-    public TeaMenuAdapter(Context context, int layoutResourceId, ArrayList data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
-        this.mContext = context;
-        this.data = data;
+    interface OnItemClickListener {
+        public void onItemClick(Tea tea);
     }
 
-    static class ViewHolder {
-        TextView imageTitle;
-        ImageView image;
+    public TeaMenuAdapter(int layoutResourceId, ArrayList<Tea> teas, OnItemClickListener onItemClickListener) {
+        this.layoutResourceId = layoutResourceId;
+        this.teas = teas;
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
+    @Override
+    public TeaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(layoutInflater, layoutResourceId, parent, false);
+        return new TeaViewHolder(viewDataBinding);
     }
 
     @Override
-    // Create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder = null;
-        Tea currentTea = getItem(position);
-
-        if (convertView == null) {
-            // If it's not recycled, initialize some attributes
-            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            convertView = inflater.inflate(layoutResourceId, parent, false);
-            holder = new ViewHolder();
-            holder.imageTitle = (TextView) convertView.findViewById(R.id.tea_grid_name);
-            holder.image = (ImageView) convertView.findViewById(R.id.image);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();;
-        }
-
-        holder.imageTitle.setText(currentTea.getTeaName());
-        holder.image.setImageResource(currentTea.getImageResourceId());
-        return convertView;
+    public void onBindViewHolder(TeaViewHolder holder, int position) {
+        holder.bindView(position);
     }
 
-}
+
+    @Override
+    public int getItemCount() {
+        return (teas == null || teas.size() == 0) ? 0 : teas.size();
+    }
+
+    public void setTeas(ArrayList<Tea> teas) {
+        this.teas = teas;
+        notifyDataSetChanged();
+    }
+
+    @BindingAdapter(value = {"imageUrl"}, requireAll = true)
+    public static void loadImage(ImageView imageView, int resID){
+        Picasso.with(imageView.getContext()).load(resID).into(imageView);
+    }
+
+    public class TeaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public ViewDataBinding itemView;
+        public TeaViewHolder(ViewDataBinding itemView) {
+            super(itemView.getRoot());
+            this.itemView = itemView;
+            itemView.getRoot().setOnClickListener(this);
+        }
+        public void bindView(int position) {
+            itemView.setVariable(BR.teaViewModel, new TeaViewModel(teas.get(position)));
+            itemView.executePendingBindings();
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClickListener.onItemClick(teas.get(getAdapterPosition()));
+        }
+    }
+ }

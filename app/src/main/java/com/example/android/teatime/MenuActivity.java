@@ -17,12 +17,15 @@
 package com.example.android.teatime;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,17 +33,18 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 
 import com.example.android.teatime.IdlingResource.SimpleIdlingResource;
+import com.example.android.teatime.databinding.ActivityMenuBinding;
 import com.example.android.teatime.model.Tea;
 
 import java.util.ArrayList;
 
-public class MenuActivity extends AppCompatActivity implements ImageDownloader.DelayerCallback {
+public class MenuActivity extends AppCompatActivity implements ImageDownloader.DelayerCallback, TeaMenuAdapter.OnItemClickListener {
 
     Intent mTeaIntent;
 
     public final static String EXTRA_TEA_NAME = "com.example.android.teatime.EXTRA_TEA_NAME";
     private ProgressBar progressBar;
-    private GridView gridview;
+    private RecyclerView recyclerView;
 
     // The Idling Resource which will be null in production.
     @Nullable
@@ -61,12 +65,13 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
-        Toolbar menuToolbar = (Toolbar) findViewById(R.id.menu_toolbar);
+        ActivityMenuBinding activityMenuBinding = DataBindingUtil.setContentView(this, R.layout.activity_menu);
+        //setContentView(R.layout.activity_menu);
+        Toolbar menuToolbar = activityMenuBinding.menuToolbar;
         setSupportActionBar(menuToolbar);
         getSupportActionBar().setTitle(getString(R.string.menu_title));
-        progressBar = (ProgressBar) findViewById(R.id.pb_loading);
-        gridview = (GridView) findViewById(R.id.tea_grid_view);
+        progressBar = activityMenuBinding.pbLoading;
+        recyclerView = activityMenuBinding.rvTeaList;
 
         // Get the IdlingResource instance
         getIdlingResource();
@@ -81,7 +86,8 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
     protected void onStart() {
         super.onStart();
         progressBar.setVisibility(View.VISIBLE);
-        gridview.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         ImageDownloader.downloadImage(this, MenuActivity.this, mIdlingResource);
     }
 
@@ -92,29 +98,17 @@ public class MenuActivity extends AppCompatActivity implements ImageDownloader.D
     @Override
     public void onDone(ArrayList<Tea> teas) {
 
-        //TextView testing =(TextView)findViewById(R.id.textView);
-        //testing.setText("Changed");
-
-        // Create a {@link TeaAdapter}, whose data source is a list of {@link Tea}s.
-        // The adapter know how to create grid items for each item in the list.
-
-        TeaMenuAdapter adapter = new TeaMenuAdapter(this, R.layout.grid_item_layout, teas);
-        gridview.setAdapter(adapter);
+        TeaMenuAdapter adapter = new TeaMenuAdapter(R.layout.grid_item_layout, teas, this);
+        recyclerView.setAdapter(adapter);
         progressBar.setVisibility(View.INVISIBLE);
-        gridview.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        adapter.setTeas(teas);
+    }
 
-        // Set a click listener on that View
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                Tea item = (Tea) adapterView.getItemAtPosition(position);
-                // Set the intent to open the {@link OrderActivity}
-                mTeaIntent = new Intent(MenuActivity.this, OrderActivity.class);
-                String teaName = item.getTeaName();
-                mTeaIntent.putExtra(EXTRA_TEA_NAME, teaName);
-                startActivity(mTeaIntent);
-            }
-        });
+    @Override
+    public void onItemClick(Tea tea) {
+        mTeaIntent = new Intent(MenuActivity.this, OrderActivity.class);
+        mTeaIntent.putExtra(EXTRA_TEA_NAME, tea.getTeaName());
+        startActivity(mTeaIntent);
     }
 }

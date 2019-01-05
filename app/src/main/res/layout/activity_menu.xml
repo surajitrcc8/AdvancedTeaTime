@@ -11,8 +11,9 @@
  limitations under the License.-->
 
 <!--Layout for Menu Activity-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
                 android:id="@+id/activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -31,20 +32,12 @@
         android:layout_height="40dp"
         android:layout_centerInParent="true"/>
 
-    <GridView
-        android:id="@+id/tea_grid_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_tea_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/menu_toolbar"
-        android:layout_margin="5dp"
-        android:clickable="true"
-        android:columnWidth="100dp"
-        android:drawSelectorOnTop="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        android:visibility="gone"/>
+        />
 
 </RelativeLayout>
+</layout>
